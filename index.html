@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Meeting Action-Item Extractor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>AI Meeting Action-Item Extractor</h1>
+    <p class="subtitle">Convert meeting transcripts into structured tasks, owners, deadlines and confidence.</p>
+
+    <form method="POST">
+        <label for="transcript">Meeting Transcript</label>
+        <textarea id="transcript" name="transcript" placeholder="Paste your meeting transcript here...">{{ transcript }}</textarea>
+        <button type="submit">Extract Action Items</button>
+    </form>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if results %}
+    <h2>Extracted Action Items</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Owner</th>
+                <th>Deadline</th>
+                <th>Confidence</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in results %}
+            <tr>
+                <td>{{ item.task }}</td>
+                <td>{{ item.owner }}</td>
+                <td>{{ item.deadline }}</td>
+                <td>{{ item.confidence }}</td>
+                <td>{{ item.status }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% elif transcript and not error %}
+        <p class="empty">No action items were detected.</p>
+    {% endif %}
+
+    <div class="sample">
+        <h3>Sample transcript</h3>
+        <p>Rahul will prepare the project report by Friday. Priya will review the report on Monday. John should send the client email by tomorrow.</p>
+    </div>
+</div>
+</body>
+</html>
